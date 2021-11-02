@@ -2,6 +2,7 @@ package com.example.lab8;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -19,6 +20,8 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         stage.setTitle("Lab8");
+        stage.setHeight(603);
+        stage.setWidth(603);
 
         ImageView[] marioView = new ImageView[9];
         Image[] imageMario = new Image[9];
@@ -46,6 +49,10 @@ public class HelloApplication extends Application {
 
         Scene scene = new Scene(baseImages);
 
+        Button restart = new Button("Recommencer");
+        Button cancel = new Button("Annuler");
+
+
         scene.setOnKeyPressed((ae) -> {
             if (ae.isControlDown() && ae.getCode() == KeyCode.M) {
                 Collections.shuffle(imageMixed);
@@ -60,7 +67,7 @@ public class HelloApplication extends Application {
             }
         });
 
-        for(ImageView temp : marioView){
+        for (ImageView temp : marioView) {
             temp.setOnDragDetected((ae) -> {
                 System.out.println("Drag and drop détecté");
                 Dragboard dragboard = temp.startDragAndDrop(TransferMode.MOVE);
@@ -78,8 +85,29 @@ public class HelloApplication extends Application {
                 temp.setImage(imageSource);
                 System.out.println("Drag and drop confirmé");
                 ae.setDropCompleted(true);
+                int test = 0;
                 for (int i = 0; i < listeImageView.size(); i++) {
-
+                    if (listeImageView.get(i).getImage() == listeImageBase.get(i)) {
+                        test++;
+                    }
+                }
+                if (test == 9) {
+                    Alert alerte = new Alert(Alert.AlertType.CONFIRMATION);
+                    alerte.setTitle("Veuillez lire");
+                    alerte.setContentText("Veux-tu recommencer le casse-tête?");
+                    ButtonType resultat = alerte.showAndWait().get();
+                    if (resultat == ButtonType.OK) {
+                        Collections.shuffle(imageMixed);
+                        baseImages.getChildren().clear();
+                        for (int i = 0; i < imageMixed.size(); i++) {
+                            listeImageView.get(i).setImage(imageMixed.get(i));
+                        }
+                        baseImages.addRow(0, listeImageView.get(0), listeImageView.get(1), listeImageView.get(2));
+                        baseImages.addRow(1, listeImageView.get(3), listeImageView.get(4), listeImageView.get(5));
+                        baseImages.addRow(2, listeImageView.get(6), listeImageView.get(7), listeImageView.get(8));
+                    }
+                    else
+                        stage.close();
                 }
             });
         }
