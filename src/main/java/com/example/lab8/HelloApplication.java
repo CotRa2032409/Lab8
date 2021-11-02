@@ -94,6 +94,7 @@ public class HelloApplication extends Application {
                 if (test == 9) {
                     Alert alerte = new Alert(Alert.AlertType.CONFIRMATION);
                     alerte.setTitle("Veuillez lire");
+                    alerte.setHeaderText("Félicitations!!");
                     alerte.setContentText("Veux-tu recommencer le casse-tête?");
                     ButtonType resultat = alerte.showAndWait().get();
                     if (resultat == ButtonType.OK) {
